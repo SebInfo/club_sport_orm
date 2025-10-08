@@ -1,0 +1,6 @@
+CREATE DATABASE IF NOT EXISTS club_sport CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci; 
+USE club_sport; -- Table des rôles CREATE TABLE IF NOT EXISTS roles ( id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(50) NOT NULL ); 
+INSERT INTO roles (name) VALUES ('Joueur'), ('Coach'), ('Président'); -- Table des membres 
+CREATE TABLE IF NOT EXISTS users ( id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(100) NOT NULL, email VARCHAR(150) NOT NULL UNIQUE, role_id INT NOT NULL, CONSTRAINT fk_users_role FOREIGN KEY (role_id) REFERENCES roles(id) ); -- Table des équipes 
+CREATE TABLE IF NOT EXISTS equipes ( id INT AUTO_INCREMENT PRIMARY KEY, nom VARCHAR(100) NOT NULL, niveau ENUM('Débutant','Confirmé') NOT NULL, coach_id INT NOT NULL, CONSTRAINT fk_equipes_coach FOREIGN KEY (coach_id) REFERENCES users(id) ); -- Table d'association joueurs ↔ équipes 
+CREATE TABLE IF NOT EXISTS joueurs_equipes ( equipe_id INT NOT NULL, joueur_id INT NOT NULL, PRIMARY KEY (equipe_id, joueur_id), CONSTRAINT fk_je_equipe FOREIGN KEY (equipe_id) REFERENCES equipes(id), CONSTRAINT fk_je_joueur FOREIGN KEY (joueur_id) REFERENCES users(id) );
